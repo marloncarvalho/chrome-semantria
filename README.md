@@ -12,8 +12,8 @@ Requirements
 
 Usage
 ------
-First off, clone this repository. At Google Chrome, go to the Extensions Page, click "Load unpacked extension..." and point to the folder where you've just cloned this repository. Access any web page, select a piece of text and "right click" it. You'll probably see a "Sentiment Analysis by Semantria" option!
+First off, clone this repository. At Google Chrome, go to the Extensions Page, click "Load unpacked extension..." and point to the folder where you've just cloned this repository. You'll be asked to provide your Key and Secret. Access any web page, select any text and "right click" it. You'll probably see a "Sentiment Analysis by Semantria" option!
 
 Contact
 ---------
-If you wanna know more about me our ask questions about this project, just follow me at @marlonscarvalho!
+If you wanna know more about me or about this project, just follow me at @marlonscarvalho!
