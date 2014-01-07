@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Semantria Extension Options</title>
+                <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+                <link href="css/custom.css" rel="stylesheet" media="screen">                
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="page-header">
+			 	<h1>Options Page <small>Semantria</small></h1>
+			</div>
+				<div class="alert alert-danger">In order to get this extension working properly, you need to provide below your Semantria Secret and Key. If you do not have it, so go to the Semantria web page and make your registration. Don't worry, we WILL NOT misuse these informations. :-) <strong>If you don't provide it, this extension won't work properly</strong>.</div>
+
+				<div class="form-group">
+					<label for="exampleInputEmail1">Semantria Key</label>
+					<input type="text" id="key" name="key" value="" placeholder="Type your Semantria Key" class="form-control"/>
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail1">Semantria Secret</label>
+					<input type="text" id="secret" name="secret" value="" placeholder="Type your Semantria Secret" class="form-control"/>
+				</div>
+				<div id="status" class="alert alert-success hide">Options Saved Successfully!</div>
+				<button class="btn btn-primary" id="save">Save</button>
+		</div>
+	</body>
+
+	<script src="js/jquery-2.0.3.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="options.js"></script>
+</html>

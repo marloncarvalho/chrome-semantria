@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Analysis Result</title>
+                <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+                <link href="css/custom.css" rel="stylesheet" media="screen">                
+	</head>
+	<body>
+		<div class="container">
+			<div class="page-header">
+			 	<h1>Semantria Sentiment Analysis <small>Result Page</small></h1>
+			</div>
+
+			<h2>Overall Sentiment: <span id="overall_sentiment" class="label label-primary"></span></h2>
+
+			<ul class="nav nav-tabs">
+			  <li class="active"><a href="#tab_entities" data-toggle="tab">Entities</a></li>
+			  <li><a href="#tab_themes" data-toggle="tab">Themes</a></li>
+			  <li><a href="#tab_phrases" data-toggle="tab">Phrases</a></li>
+			  <li><a href="#tab_topics" data-toggle="tab">Topics</a></li>
+			</ul>
+
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab_entities">
+					<table class="table table-hover">
+						<tr>
+							<th>Name</th>
+							<th>Sentiment Score</th>
+							<th>Polarity</th>
+						</tr>
+						<tbody id="entities">
+						</tbody>
+					</table>
+				</div>
+
+				<div class="tab-pane" id="tab_themes">
+					<table class="table table-hover">
+						<tr>
+							<th>Name</th>
+							<th>Sentiment Score</th>
+							<th>Polarity</th>
+						</tr>
+						<tbody id="themes">
+						</tbody>
+					</table>
+				</div>
+
+				<div class="tab-pane" id="tab_phrases">
+					<table class="table table-hover">
+						<tr>
+							<th>Name</th>
+							<th>Sentiment Score</th>
+							<th>Polarity</th>
+						</tr>
+						<tbody id="phrases">
+						</tbody>
+					</table>
+				</div>
+
+				<div class="tab-pane" id="tab_topics">
+					<table class="table table-hover">
+						<tr>
+							<th>Name</th>
+							<th>Sentiment Score</th>
+							<th>Polarity</th>
+						</tr>
+						<tbody id="topics">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<script src="result.js"></script>
+		<script src="js/jquery-2.0.3.min.js"></script>
+	        <script src="js/bootstrap.min.js"></script>
+	</body>
+</html>
