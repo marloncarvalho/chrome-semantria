@@ -37,8 +37,9 @@ function processReply(session) {
 		}
 		$("#pleaseWaitDialog").modal('hide');
 	} else {
-		$("#pleaseWaitDialog").modal('hide');
-		alert("No results!");
+		setTimeout(function() {
+			processReply(session);
+		}, 1000);
 	}
 };
 
