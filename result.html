@@ -11,7 +11,7 @@
 			 	<h1>Semantria Sentiment Analysis <small>Result Page</small></h1>
 			</div>
 
-			<h2>Overall Sentiment: <span id="overall_sentiment" class="label label-primary"></span></h2>
+			<h2>Overall Sentiment Score: <span id="overall_sentiment" class="label label-primary"></span></h2>
 
 			<ul class="nav nav-tabs">
 			  <li class="active"><a href="#tab_entities" data-toggle="tab">Entities</a></li>
@@ -69,9 +69,27 @@
 					</table>
 				</div>
 			</div>
+
+			<div class="modal fade" id="pleaseWaitDialog" tabindex="-1" role="dialog" style="padding-top: 25%" data-backdrop="static" data-keyboard="false">
+				<div class="model-dialog" style="width:60%;margin: 0 auto;">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Contacting Semantria. Please wait a second...</h4>
+						</div>
+						<div class="modal-body">
+							<div class="progress progress-striped active">
+								<div class="progress-bar progress-bar-info" style="width: 100%;"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
-		<script src="result.js"></script>
+
 		<script src="js/jquery-2.0.3.min.js"></script>
 	        <script src="js/bootstrap.min.js"></script>
+		<script src="js/SemantriaJavaScriptSDK.js"></script>
+		<script src="js/result.js"></script>
 	</body>
 </html>
