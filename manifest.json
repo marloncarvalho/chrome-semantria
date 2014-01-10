@@ -8,12 +8,6 @@
      "tabs"
    ],
   "options_page": "options.html",
-  "content_scripts": [
-    {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["js/content_script.js"]
-    }
-  ],
   "background": {
      "scripts": ["js/script.js","js/SemantriaJavaScriptSDK.js"]
    },

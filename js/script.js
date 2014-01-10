@@ -24,26 +24,24 @@ var selectedText = "";
  * @param tab Tab.
  */
 function optionItemOnClick (info, tab) {
-	chrome.tabs.sendRequest(tab.id, {method: "getSelection"}, function(response){
-		if(localStorage["semantria_key"] == null || localStorage["semantria_secret"] == null || localStorage["semantria_key"] == "" || localStorage["semantria_secret"] == "") {
-			alert("You must provide your Semantria Key and Secret. Click OK to be redirected to the Options Page.");
-			chrome.tabs.create({url: "options.html"});
-		} else if(response == null || response.data == null || response.data == "") {
-			alert("No Selection.");
-		} else {
-			selectedText = response.data;
-			chrome.tabs.create({
-				url: chrome.extension.getURL('result.html'),
-				active: false
-				}, function(tab) {
-					chrome.windows.create({
-						tabId: tab.id,
-						type: 'popup',
-						focused: true
-            			});
-        		});
-		}
-	});
+	if(localStorage["semantria_key"] == null || localStorage["semantria_secret"] == null || localStorage["semantria_key"] == "" || localStorage["semantria_secret"] == "") {
+		alert("You must provide your Semantria Key and Secret. Click OK to be redirected to the Options Page.");
+		chrome.tabs.create({url: "options.html"});
+	} else if(info.selectionText == null || info.selectionText == "") {
+		alert("No selection!");
+	} else {
+		selectedText = info.selectionText;
+		chrome.tabs.create({
+			url: chrome.extension.getURL('result.html'),
+			active: false
+			}, function(tab) {
+				chrome.windows.create({
+					tabId: tab.id,
+					type: 'popup',
+					focused: true
+    			});
+		});
+	}
 }
 
 /**

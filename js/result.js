@@ -23,7 +23,6 @@
  */
 function processReply(session) {
 	console.log('Processing Semantria Reply');
-	$("#pleaseWaitDialog").modal('hide');
 
 	var processedDocuments = session.getProcessedDocuments();
 	if (processedDocuments && processedDocuments.constructor == Array) {
@@ -36,7 +35,9 @@ function processReply(session) {
 		for (var i in processedDocuments) {
 			showResult(processedDocuments[i]);
 		}
+		$("#pleaseWaitDialog").modal('hide');
 	} else {
+		$("#pleaseWaitDialog").modal('hide');
 		alert("No results!");
 	}
 };
@@ -66,69 +67,72 @@ function sendServiceRequest(selectedText) {
  * @param table Table to be filled.
  * @param list Data.
  */
-function fill(table, list) {
+function fill_table_sentiment(table, list) {
 	for(var i=0; i < list.length; i++) {
 		var data = list[i];
-		var tr = document.createElement("TR");
+		var tr = $("<tr></tr>");
 
-		var tdName = document.createElement("TD");
-		tdName.innerHTML = data.title;
-		tr.appendChild(tdName);
+		var tdName = $("<td></td>");
+		tdName.html(data.title);
+		tr.append(tdName);
 
-		var tdSentiment = document.createElement("TD");
+		var tdSentiment = $("<td></td>");
 		if(data.sentiment_score != null) {
-			var span = document.createElement("SPAN");
+			var span = $("<span></span>");
 
 			if(data.sentiment_score > 0) {
-				span.className = "label label-success";
+				span.addClass("label label-success");
 			} else if(data.sentiment_score < 0) {
-				span.className = "label label-danger";
+				span.addClass("label label-danger");
 			} else {
-				span.className = "label label-default";
+				span.addClass("label label-default");
 			}
 
-			span.innerHTML = data.sentiment_score;
-			tdSentiment.appendChild(span);
+			span.html(data.sentiment_score);
+			tdSentiment.append(span);
 		}
-		tr.appendChild(tdSentiment);
+		tr.append(tdSentiment);
 
-		var tdPolarity = document.createElement("TD");
+		var tdPolarity = $("<td></td>");
 		if(data.sentiment_polarity != null) {
-			tdPolarity.innerHTML = data.sentiment_polarity;
+			tdPolarity.html(data.sentiment_polarity);
 		}
-		tr.appendChild(tdPolarity);
-
-		table.appendChild(tr);
+		tr.append(tdPolarity);
+		table.append(tr);
 	}
 }
 
 /**
- * Show Result.
+ * Show Results.
  *
  * @param result Semantria response.
  */
 function showResult(result) {
 	if(result != null) {
-		document.getElementById("overall_sentiment").innerHTML = result.sentiment_score;
+		$("#overall_sentiment").html(result.sentiment_score);
 
 		var entities = result.entities;
 		if(entities != null) {
-			fill(document.getElementById("entities"), entities);
+			$("#entities_total").html(entities.length);
+			fill_table_sentiment($("#entities"), entities);
 		}
 
 		var topics = result.topics;
 		if(topics != null) {
-			fill(document.getElementById("topics"), topics);
+			$("#topics_total").html(topics.length);
+			fill_table_sentiment($("#topics"), topics);
 		}
 
 		var phrases = result.phrases;
 		if(phrases != null) {
-			fill(document.getElementById("phrases"), phrases);
+			$("#phrases_total").html(phrases.length);
+			fill_table_sentiment($("#phrases"), phrases);
 		}
 
 		var themes = result.themes;
 		if(entities != null) {
-			fill(document.getElementById("themes"), themes);
+			$("#themes_total").html(themes.length);
+			fill_table_sentiment($("#themes"), themes);
 		}
 
 	}
