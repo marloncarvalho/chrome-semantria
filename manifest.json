@@ -1,7 +1,7 @@
 {
-   "description": "Semantria Google Chrome Extension",
+   "description": "Semantria - Google Chrome Extension",
    "manifest_version": 3,
-   "name": "Sentiment Analysis using Semantria",
+   "name": "Sentiment Analysis",
    "permissions": [
       "https://api30.semantria.com/",
       "contextMenus",
