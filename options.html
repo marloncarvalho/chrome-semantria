@@ -2,56 +2,79 @@
 <html lang="en">
 	<head>
 		<title>Semantria Extension Options</title>
-                <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-                <link href="css/custom.css" rel="stylesheet" media="screen">                
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="css/custom.css" rel="stylesheet" media="screen">
 	</head>
 
 	<body>
 		<div class="container">
 			<div class="page-header">
-			 	<h1>Options Page <small>Semantria</small></h1>
+				<h1>Sentiment Analysis
+					<small>Semantria</small>
+				</h1>
 			</div>
 
-				<div class="panel panel-default">
-				  <div class="panel-heading"><span class="glyphicon glyphicon-exclamation-sign"></span><strong> How to Use</strong></div>
-				  <div class="panel-body">
-					<small>First off, enter your Semantria Secret and Key credentials below. If you don't have a set of credentials, register for a free account at <a href="https://semantria.com">https://semantria.com</a>.
- 
-If you do not provide credentials, this extension will not work properly.
-Once you have entered your credentials, click on "save" and then you may close this tab.
- 
-To analyze text, access any page you want, highlight a piece of text, right click it, and then choose the "Sentiment Analysis by Semantria" option.
- </small>
-				  </div>
+			<div class="panel panel-default">
+				<div class="panel-heading"><span class="glyphicon glyphicon-exclamation-sign"></span><strong>
+					Instructions</strong></div>
+				<div class="panel-body">
+
+					<div class="col-1" style="height:10em">
+						<img src="img/1.png" style="padding-top: 2.5em"/>
+					</div>
+
+					<div class="col-6">
+						<div id="success-panel" class="alert alert-success" style="display: none">
+							Ok! Now, you're ready to go!
+						</div>
+
+						<div id="error-panel" class="alert alert-danger" style="display: none">
+
+						</div>
+
+						<div class="form-group">
+							<label for="key">Semantria Key</label>
+							<input type="text" id="key" name="key" value="" placeholder="Type your Semantria Key"
+							       class="form-control"/>
+						</div>
+
+						<div class="form-group">
+							<label for="secret">Semantria Secret</label>
+							<input type="text" id="secret" name="secret" value=""
+							       placeholder="Type your Semantria Secret" class="form-control"/>
+						</div>
+
+						<div id="status" class="alert alert-success hide">Options Saved Successfully!</div>
+						<button class="btn btn-primary" id="save"><span class="glyphicon glyphicon-ok"></span> Save
+						</button>
+
+					</div>
+
+					<div class="col-1 center-block">
+						<img src="img/or.png"/>
+					</div>
+
+					<div class="col-4 center-block">
+						<h2>Get your Semantria keys</h2>
+						<button class="btn btn-info btn-lg"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Free Trial
+						                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+						<br>
+						<span><small>Start a Semantria Trial for free <br> with 10,000 transactions</small></span>
+					</div>
+
 				</div>
 
-				<div class="panel panel-default">
-				  <div class="panel-heading"><span class="glyphicon glyphicon-barcode"></span><strong> Provide Your Semantria Data Below</strong></div>
-				  <div class="panel-body">
+			</div>
+			<div class="center-block">
+				<img src="img/step-1.png"/>
+				<img src="img/step-2.png"/>
+				<img src="img/step-3.png"/>
+				<img src="img/step-4.png"/>
+			</div>
 
-					<div id="success-panel" class="alert alert-success" style="display: none">
-						Ok! Now, you're ready to go!
-					</div>
+			<br>
+			<button class="btn center-block" id="close"><span class="glyphicon glyphicon-remove"></span> Close</button>
 
-					<div id="error-panel" class="alert alert-danger" style="display: none">
-
-					</div>
-
-					<div class="form-group">
-						<label for="exampleInputEmail1">Semantria Key</label>
-						<input type="text" id="key" name="key" value="" placeholder="Type your Semantria Key" class="form-control"/>
-					</div>
-
-					<div class="form-group">
-						<label for="exampleInputEmail1">Semantria Secret</label>
-						<input type="text" id="secret" name="secret" value="" placeholder="Type your Semantria Secret" class="form-control"/>
-					</div>
-
-					<div id="status" class="alert alert-success hide">Options Saved Successfully!</div>
-					<button class="btn btn-primary" id="save"><span class="glyphicon glyphicon-ok"></span> Save</button>
-					<button class="btn" id="close"><span class="glyphicon glyphicon-remove"></span> Close</button>
-				  </div>
-				</div>
 			<div class="pull-right">
 				<a href="http://www.semantria.com/">
 					<img src="img/semantria-logo.png" border="0"/>
@@ -59,21 +82,20 @@ To analyze text, access any page you want, highlight a piece of text, right clic
 			</div>
 		</div>
 
-			<div class="modal fade" id="pleaseWaitDialog" tabindex="-1" role="dialog" style="padding-top: 25%" data-backdrop="static" data-keyboard="false">
-				<div class="model-dialog" style="width:60%;margin: 0 auto;">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 class="modal-title">Contacting Semantria. Please, wait a second...</h4>
-						</div>
-						<div class="modal-body">
-							<div class="progress progress-striped active">
-								<div class="progress-bar progress-bar-info" style="width: 100%;"></div>
-							</div>
+		<div class="modal fade" id="pleaseWaitDialog" tabindex="-1" role="dialog" style="padding-top: 25%"
+		     data-backdrop="static" data-keyboard="false">
+			<div class="model-dialog" style="width:60%;margin: 0 auto;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Contacting Semantria. Please, wait a second...</h4>
+					</div>
+					<div class="modal-body">
+						<div class="progress progress-striped active">
+							<div class="progress-bar progress-bar-info" style="width: 100%;"></div>
 						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</body>
 	<script src="js/jquery-2.0.3.min.js"></script>
