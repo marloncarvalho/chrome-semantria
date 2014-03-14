@@ -14,8 +14,29 @@
  *  You should have received a copy of the GNU General Public License
  *   along with Semantria Chrome Extension.  If not, see <http://www.gnu.org/licenses/>.
  **/
-
 var selectedText = "";
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    if (request.method == "getLocalStorage") {
+        sendResponse({data: localStorage});
+    } else if (request.method == "openResult") {
+        selectedText = request.text;
+        chrome.tabs.create({
+            url: chrome.extension.getURL('result.html'),
+            active: false
+        }, function (tab) {
+            chrome.windows.create({
+                tabId: tab.id,
+                type: 'popup',
+                focused: true
+            });
+        });
+    } else {
+        sendResponse({});
+    }
+});
+
+
 
 /**
  * Handle user click on our context menu item.
@@ -23,25 +44,25 @@ var selectedText = "";
  * @param info Context menu info.
  * @param tab Tab.
  */
-function optionItemOnClick (info, tab) {
-	if(localStorage["semantria_key"] == null || localStorage["semantria_secret"] == null || localStorage["semantria_key"] == "" || localStorage["semantria_secret"] == "") {
-		alert("You must provide your Semantria Key and Secret. Click OK to be redirected to the Options Page.");
-		chrome.tabs.create({url: "options.html"});
-	} else if(info.selectionText == null || info.selectionText == "") {
-		alert("No selection!");
-	} else {
-		selectedText = info.selectionText;
-		chrome.tabs.create({
-			url: chrome.extension.getURL('result.html'),
-			active: false
-			}, function(tab) {
-				chrome.windows.create({
-					tabId: tab.id,
-					type: 'popup',
-					focused: true
-    			});
-		});
-	}
+function optionItemOnClick(info, tab) {
+    if (localStorage["semantria_key"] == null || localStorage["semantria_secret"] == null || localStorage["semantria_key"] == "" || localStorage["semantria_secret"] == "") {
+        alert("You must provide your Semantria Key and Secret. Click OK to be redirected to the Options Page.");
+        chrome.tabs.create({url: "options.html"});
+    } else if (info.selectionText == null || info.selectionText == "") {
+        alert("No selection!");
+    } else {
+        selectedText = info.selectionText;
+        chrome.tabs.create({
+            url: chrome.extension.getURL('result.html'),
+            active: false
+        }, function (tab) {
+            chrome.windows.create({
+                tabId: tab.id,
+                type: 'popup',
+                focused: true
+            });
+        });
+    }
 }
 
 /**
@@ -49,21 +70,21 @@ function optionItemOnClick (info, tab) {
  * If yes, show options pages.
  */
 function install_notice() {
-	if (localStorage.getItem('install_time')) {
-		if(localStorage["semantria_key"] == null || localStorage["semantria_secret"] == null || localStorage["semantria_key"] == "" || localStorage["semantria_secret"] == "") {
-			alert("You must provide your Semantria Key and Secret. Click OK to be redirected to the Options Page.");
-			chrome.tabs.create({url: "options.html"});
-		}
-        	return;
-	} else {
-		var now = new Date().getTime();
-		localStorage.setItem('install_time', now);
-		chrome.tabs.create({url: "options.html"});
-	}
+    if (localStorage.getItem('install_time')) {
+        if (localStorage["semantria_key"] == null || localStorage["semantria_secret"] == null || localStorage["semantria_key"] == "" || localStorage["semantria_secret"] == "") {
+            alert("You must provide your Semantria Key and Secret. Click OK to be redirected to the Options Page.");
+            chrome.tabs.create({url: "options.html"});
+        }
+        return;
+    } else {
+        var now = new Date().getTime();
+        localStorage.setItem('install_time', now);
+        chrome.tabs.create({url: "options.html"});
+    }
 }
 
 install_notice();
 
 // Adding a Context Menu Option.
-chrome.contextMenus.create({"title": "Sentiment Analysis by Semantria", "contexts":["selection"], "onclick": optionItemOnClick});
+chrome.contextMenus.create({"title": "Sentiment Analysis by Semantria", "contexts": ["selection"], "onclick": optionItemOnClick});
 

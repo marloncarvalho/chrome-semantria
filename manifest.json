@@ -1,21 +1,29 @@
 {
-   "description": "Semantria - Google Chrome Extension",
-   "manifest_version": 3,
-   "name": "Sentiment Analysis",
-   "permissions": [
-      "https://api30.semantria.com/",
-      "contextMenus",
-     "tabs"
-   ],
-  "options_page": "options.html",
-  "background": {
-     "scripts": ["js/script.js","js/SemantriaJavaScriptSDK.js"]
-   },
-  "icons": {
-    "16": "img/logo-16.png",
-    "32": "img/logo-32.png",
-    "64": "img/logo-64.png",
-    "128": "img/logo-128.png"
-   },
-   "version": "0.0.1"
+    "description": "Semantria - Google Chrome Extension",
+    "manifest_version": 3,
+    "name": "Sentiment Analysis",
+    "web_accessible_resources": ["img/logo-16.png"],
+    "content_scripts": [
+        {
+            "js": [ "js/jquery-2.0.3.min.js", "js/SemantriaJavaScriptSDK.js", "js/content_script.js" ],
+            "matches": [ "*://*.twitter.com/*" ]
+        }
+    ],
+    "permissions": [
+        "https://twitter.com/",
+        "https://api30.semantria.com/",
+        "contextMenus",
+        "tabs"
+    ],
+    "options_page": "options.html",
+    "background": {
+        "scripts": ["js/script.js", "js/SemantriaJavaScriptSDK.js"]
+    },
+    "icons": {
+        "16": "img/logo-16.png",
+        "32": "img/logo-32.png",
+        "64": "img/logo-64.png",
+        "128": "img/logo-128.png"
+    },
+    "version": "0.0.2"
 }

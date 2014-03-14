@@ -15,43 +15,48 @@
  *   along with Semantria Chrome Extension.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+$("#trial").on("click", function () {
+    window.open("http://www.semantria.com/", "_blank");
+});
+
 $("#save").on("click", function save_options() {
-	$("#pleaseWaitDialog").modal("show");
-	$("#success-panel").hide();
-	$("#error-panel").hide();
+    $("#pleaseWaitDialog").modal("show");
+    $("#success-panel").hide();
+    $("#error-panel").hide();
 
-	localStorage["semantria_key"] = $("#key").val();
-	localStorage["semantria_secret"] =  $("#secret").val();
+    localStorage["semantria_key"] = $("#key").val();
+    localStorage["semantria_secret"] = $("#secret").val();
 
-	var serializer = new JsonSerializer();
-	var session = new Session(localStorage["semantria_key"], localStorage["semantria_secret"], serializer, 'Chrome Extension', true);
+    var serializer = new JsonSerializer();
+    var session = new Session(localStorage["semantria_key"], localStorage["semantria_secret"], serializer, 'Chrome Extension', true);
 
-	setTimeout(function() {
-		var status = session.getStatus();
-		if(status.status == 401) {
-			$("#error-panel").show();
-			$("#error-panel").html("Unauthorized. Please check your credentials and try again.");
-		} else {
-			$("#success-panel").show();
-		}
-		$("#pleaseWaitDialog").modal("hide");
-	}, 1000);
+    setTimeout(function () {
+        var status = session.getStatus();
+        if (status.status == 401) {
+            $("#error-panel").show();
+            $("#error-panel").html("Unauthorized. Please check your credentials and try again.");
+        } else {
+            $("#success-panel").show();
+        }
+        $("#pleaseWaitDialog").modal("hide");
+    }, 1000);
 
 });
 
 $("#close").on("click", function save_options() {
-	chrome.tabs.getCurrent(function(tab) {
-	    chrome.tabs.remove(tab.id, function() { });
-	});
+    chrome.tabs.getCurrent(function (tab) {
+        chrome.tabs.remove(tab.id, function () {
+        });
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function restore_options() {
-	var key = localStorage["semantria_key"];
-	var secret = localStorage["semantria_secret"];
-	if (!key && !secret) {
-		return;
-	}
+    var key = localStorage["semantria_key"];
+    var secret = localStorage["semantria_secret"];
+    if (!key && !secret) {
+        return;
+    }
 
-	$("#key").val(key);
-	$("#secret").val(secret);
+    $("#key").val(key);
+    $("#secret").val(secret);
 });

@@ -509,7 +509,7 @@ Session.prototype.AuthRequest.prototype.getRequestHeaders = function(method, non
 	}
 
     headers["x-app-name"] = this.applicationName;
-	headers["Accept-Encoding"] = this.acceptEncoding;
+	//headers["Accept-Encoding"] = this.acceptEncoding;
 
 	return headers;
 };

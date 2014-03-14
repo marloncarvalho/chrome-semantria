@@ -15,7 +15,6 @@
  *   along with Semantria Chrome Extension.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-
 /**
  * Process Semantria Reply.
  *
@@ -131,7 +130,7 @@ function showResult(result) {
 		}
 
 		var themes = result.themes;
-		if(entities != null) {
+		if(themes != null) {
 			$("#themes_total").html(themes.length);
 			fill_table_sentiment($("#themes"), themes);
 		}
