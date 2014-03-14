@@ -35,10 +35,6 @@ function processReply(session) {
 			showResult(processedDocuments[i]);
 		}
 		$("#pleaseWaitDialog").modal('hide');
-	} else {
-		setTimeout(function() {
-			processReply(session);
-		}, 1000);
 	}
 };
 

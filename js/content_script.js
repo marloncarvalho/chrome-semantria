@@ -27,32 +27,10 @@ var globalStorage = null;
  */
 var Twitter = function () {
     var TWITTER_TWEET_TEXT_CLASS = "tweet-text";
-    var TWITTER_TWEET_CONTAINER_CLASS = "tweet";
-
-    /**
-     * Given an element and a CSS class, verifies whether the element contains this class or not.
-     *
-     * @param element Element.
-     * @param cls CSS Class.
-     * @returns {boolean}
-     */
-    function hasClass(element, cls) {
-        return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
-    }
-
-    /**
-     * Find HTML tweet element.
-     *
-     * @param tweet Tweet.
-     * @returns {*}
-     */
-    function getTweetContainer(tweet) {
-        var container = tweet;
-        while (!hasClass(container, TWITTER_TWEET_CONTAINER_CLASS) && container.parentNode) {
-            container = container.parentNode;
-        }
-        return container;
-    }
+    var serializer = new JsonSerializer();
+    var session = null;
+    var onFinishedListener = function () {
+    };
 
     /**
      * Given a number representing a sentiment score, returns a color representing this sentiment.
@@ -60,19 +38,14 @@ var Twitter = function () {
      * @param sentiment Sentiment.
      * @returns {string} Color.
      */
-    function getSentimentColor(sentiment) {
+    function getSentimentColor(sentiment_polarity) {
         var color = '';
-
-        if (sentiment < -.5) {
-            color = '#FF0000';
-        } else if (sentiment < -0.01) {
-            color = '#FF0000';
-        } else if (sentiment < .01)
+        if (sentiment_polarity == "negative") {
+            color = '#BA8A86';
+        } else if (sentiment_polarity == "neutral") {
             color = '#AAAAAA';
-        else if (sentiment < .5) {
-            color = '#AAAAAA';
-        } else {
-            color = '#668161';
+        } else if (sentiment_polarity == "positive") {
+            color = '#5C9B51';
         }
 
         return color;
@@ -95,51 +68,48 @@ var Twitter = function () {
                 }, 1000);
             }
 
-            var n = 0
             for (var i in processedDocuments) {
                 var data = processedDocuments[i];
                 var tweetId = data["id"];
-                var sentiment = data["sentiment_score"];
                 var tweet = document.getElementById(tweetId);
+
+                if (tweet == null) {
+                    continue;
+                }
+
                 var total_entities = data["entities"] != null ? data["entities"].length : 0;
                 var total_themes = data["themes"] != null ? data["themes"].length : 0;
-
                 var img = "<img style='vertical-align:middle' src='" + chrome.extension.getURL("img/logo-16.png") + "'/>";
-                var sentiment_text = "sentiment: <span style='color: " + getSentimentColor(sentiment) + "'>" + data["sentiment_polarity"] + " (" + sentiment + ")</span>";
+                var sentimentText = "sentiment: <span style='color: " + getSentimentColor(data["sentiment_polarity"]) + "'>" + data["sentiment_polarity"] + " (" + data["sentiment_score"] + ")</span>";
                 var entities = " - entities: <span style='color: #419641'>" + total_entities + "</span>";
                 var themes = " - themes: <span style='color: #419641'>" + total_themes + "</span>";
-                var viewresults = " - <a id='a" + n + "' href='javascript:'>view results</a>";
+                var viewResults = " - <a id='a" + tweetId + "' href='javascript:'>view results</a>";
 
-                $(tweet).after("<div style='padding-top: 0.5em'>" + img + " <span class='with-icn retweet js-tooltip'>" + sentiment_text + entities + themes + viewresults + "</span></div>");
-                $("#a" + n).attr("doc", tweet.innerText);
-                $("#a" + n).on("click", function () {
-                    chrome.runtime.sendMessage({method: "openResult", text: $("#"+this.id).attr("doc")}, function (response) {
+                $(tweet).after("<div style='padding-top: 0.5em'>" + img + " <span class='with-icn retweet js-tooltip'>" + sentimentText + entities + themes + viewResults + "</span></div>");
+                $(document.getElementById("a" + tweetId)).attr("doc", tweet.innerText);
+                $(document.getElementById("a" + tweetId)).on("click", function () {
+                    chrome.runtime.sendMessage({method: "openResult", text: $(document.getElementById(this.id)).attr("doc")}, function (response) {
                     });
                 });
-                n++;
             }
         }
+
+        onFinishedListener();
     }
+
+    this.setOnFinishedListener = function (on) {
+        onFinishedListener = on;
+    };
 
     /**
      * Start finding all tweets and processing them.
      */
     this.start = function () {
-        var tweets = document.getElementsByClassName(TWITTER_TWEET_TEXT_CLASS);
-        var newEntries = false;
-        for (var i in tweets) {
-            var tweet = tweets[i];
-            if (!tweet.getAttribute || tweet.getAttribute("e")) {
-                continue;
-            }
-            newEntries = true;
+        if (session == null) {
+            session = new Session(globalStorage["semantria_key"], globalStorage["semantria_secret"], serializer, 'Chrome Extension', true);
         }
 
-        if (!newEntries)
-            return;
-
-        var serializer = new JsonSerializer();
-        var session = new Session(globalStorage["semantria_key"], globalStorage["semantria_secret"], serializer, 'Chrome Extension', true);
+        var tweets = document.getElementsByClassName(TWITTER_TWEET_TEXT_CLASS);
         var docs = [];
 
         for (var i in tweets) {
@@ -148,35 +118,47 @@ var Twitter = function () {
                 continue;
             }
 
-            tweet.setAttribute("e", "1");
             var tweetId = Math.random() * 9999999;
             tweet.id = tweetId;
-
-            var text = tweet.innerText;
-            var doc = {"id": tweetId, "text": text};
-            docs.push(doc);
+            tweet.setAttribute("e", "1");
+            docs.push({"id": tweetId, "text": tweet.innerText});
         }
-        session.queueBatchOfDocuments(docs);
-        setTimeout(function () {
-            process(session, tweets.length);
-        }, 1000);
+
+        if (docs.length > 0) {
+            session.queueBatchOfDocuments(docs);
+            setTimeout(function () {
+                process(session, tweets.length);
+            }, 2000);
+        } else {
+            onFinishedListener();
+        }
     };
 
 };
 
+var count = 0;
 var twitter = new Twitter();
+twitter.setOnFinishedListener(function () {
+    // Restarting the nodes counter.
+    count = 0;
+});
 
 /**
  * Send a message requesting the extension localStorage instance.
  */
 chrome.runtime.sendMessage({method: "getLocalStorage", key: "status"}, function (response) {
     globalStorage = response.data;
-    //twitter.start();
 });
 
-//listen for when DOM is changed by AJAX calls
-document.addEventListener("DOMNodeInserted", function (evt) {
-    setTimeout(function () {
-        twitter.start();
-    }, 1000);
+
+$("#stream-items-id").bind("DOMNodeInserted", function () {
+
+    // This listener is called every time we have a node inserted. It doesn't care about the node type.
+    if (count == 0) {
+        // Waiting a second so we can have all nodes inserted before we start processing it all.
+        setTimeout(function () {
+            twitter.start();
+        }, 3000);
+    }
+    count++;
 });
