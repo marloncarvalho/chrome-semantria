@@ -34,8 +34,10 @@ function processReply(session) {
 		for (var i in processedDocuments) {
 			showResult(processedDocuments[i]);
 		}
-		$("#pleaseWaitDialog").modal('hide');
-	}
+    } else {
+        alert("Something went wrong. We couldn't contact Semantria API. Please, click OK and refresh this page.");
+    }
+    $("#pleaseWaitDialog").modal('hide');
 };
 
 /**
