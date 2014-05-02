@@ -2,18 +2,20 @@
     "description": "Semantria - Google Chrome Extension",
     "manifest_version": 3,
     "name": "Sentiment Analysis",
-    "web_accessible_resources": ["img/logo-16.png"],
+    "web_accessible_resources": ["img/logo-16.png", "img/logo-23.png", "twitter-modal-confirm.html"],
     "content_scripts": [
         {
             "js": [ "js/jquery-2.0.3.min.js", "js/SemantriaJavaScriptSDK.js", "js/content_script.js" ],
-            "matches": [ "*://*.twitter.com/*" ]
+            "matches": [ "*://*.twitter.com/*" ],
+            "run_at": "document_end"
         }
     ],
     "permissions": [
         "https://twitter.com/",
         "https://api30.semantria.com/",
         "contextMenus",
-        "tabs"
+        "tabs",
+        "storage"
     ],
     "options_page": "options.html",
     "background": {

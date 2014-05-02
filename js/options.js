@@ -24,11 +24,12 @@ $("#save").on("click", function save_options() {
     $("#success-panel").hide();
     $("#error-panel").hide();
 
-    localStorage["semantria_key"] = $("#key").val();
-    localStorage["semantria_secret"] = $("#secret").val();
+    var key = $("#key").val();
+    var secret = $("#secret").val();
+    chrome.storage.sync.set({"credentials": {key: key, secret: secret}});
 
     var serializer = new JsonSerializer();
-    var session = new Session(localStorage["semantria_key"], localStorage["semantria_secret"], serializer, 'Chrome Extension', true);
+    var session = new Session(key, secret, serializer, 'Chrome Extension', true);
 
     setTimeout(function () {
         var status = session.getStatus();
@@ -51,12 +52,14 @@ $("#close").on("click", function save_options() {
 });
 
 document.addEventListener('DOMContentLoaded', function restore_options() {
-    var key = localStorage["semantria_key"];
-    var secret = localStorage["semantria_secret"];
-    if (!key && !secret) {
-        return;
-    }
+    chrome.storage.sync.get("credentials", function (value) {
+        var credentials = value.credentials;
+        if (credentials != null && credentials.key != null && credentials.secret != null) {
+            $("#key").val(credentials.key);
+            $("#secret").val(credentials.secret);
+        } else {
+            return;
+        }
+    });
 
-    $("#key").val(key);
-    $("#secret").val(secret);
 });

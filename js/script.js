@@ -17,9 +17,7 @@
 var selectedText = "";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.method == "getLocalStorage") {
-        sendResponse({data: localStorage});
-    } else if (request.method == "openResult") {
+    if (request.method == "openResult") {
         selectedText = request.text;
         chrome.tabs.create({
             url: chrome.extension.getURL('result.html'),
@@ -35,7 +33,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         sendResponse({});
     }
 });
-
 
 
 /**

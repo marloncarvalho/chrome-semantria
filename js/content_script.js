@@ -14,8 +14,21 @@
  *  You should have received a copy of the GNU General Public License
  *   along with Semantria Chrome Extension.  If not, see <http://www.gnu.org/licenses/>.
  **/
+var credentials = {};
+var options = {};
 
-var globalStorage = null;
+// Getting user global options.
+chrome.storage.sync.get("options", function (value) {
+    options = value.options;
+    if (!options) {
+        options = {twitter_analysis_confirm: true};
+    }
+});
+
+// Getting user credentials.
+chrome.storage.sync.get("credentials", function (value) {
+    credentials = value.credentials;
+});
 
 /**
  * Twitter helper class.
@@ -106,7 +119,7 @@ var Twitter = function () {
      */
     this.start = function () {
         if (session == null) {
-            session = new Session(globalStorage["semantria_key"], globalStorage["semantria_secret"], serializer, 'Chrome Extension', true);
+            session = new Session(credentials.key, credentials.secret, serializer, 'Chrome Extension', true);
         }
 
         var tweets = document.getElementsByClassName(TWITTER_TWEET_TEXT_CLASS);
@@ -136,29 +149,32 @@ var Twitter = function () {
 
 };
 
-var count = 0;
 var twitter = new Twitter();
-twitter.setOnFinishedListener(function () {
-    // Restarting the nodes counter.
-    count = 0;
-});
 
-/**
- * Send a message requesting the extension localStorage instance.
- */
-chrome.runtime.sendMessage({method: "getLocalStorage", key: "status"}, function (response) {
-    globalStorage = response.data;
-});
+// Global action button image.
+var img = "<img style='vertical-align:middle' src='" + chrome.extension.getURL("img/logo-23.png") + "'/>";
 
+// Adding a global action. When the clicked, it runs the semantria analysis.
+$("#global-actions").append('<li id="semantria-global-action" class="profile"> ' +
+    '<a class="js-nav" href="javascript:;" data-component-term="profile_nav"  title="Semantria"> <span class="Icon  Icon--large">' + img + '</span> ' +
+    '<span class="text">Semantria</span> </a> </li>');
 
-$("#stream-items-id").bind("DOMNodeInserted", function () {
-
-    // This listener is called every time we have a node inserted. It doesn't care about the node type.
-    if (count == 0) {
-        // Waiting a second so we can have all nodes inserted before we start processing it all.
-        setTimeout(function () {
-            twitter.start();
-        }, 3000);
+$(document.getElementById("semantria-global-action")).on("click", function () {
+    options.twitter_analysis_confirm=true;
+    if (options.twitter_analysis_confirm) {
+        $.get(chrome.extension.getURL('/twitter-modal-confirm.html'), function (data) {
+            $('body').append(data);
+            $("#semantria-warning-cancel").on("click", function () {
+                $("#semantria-warning").remove();
+            });
+            $("#semantria-warning-confirm").on("click", function () {
+                options.twitter_analysis_confirm = !$('#semantria-dontask').prop('checked');
+                chrome.storage.sync.set({"options": options});
+                $("#semantria-warning").remove();
+                //twitter.start();
+            });
+        });
     }
-    count++;
+
 });
+
