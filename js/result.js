@@ -15,6 +15,12 @@
  *   along with Semantria Chrome Extension.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+// Getting user credentials.
+var credentials = {};
+chrome.storage.sync.get("credentials", function (value) {
+    credentials = value.credentials;
+});
+
 /**
  * Process Semantria Reply.
  *
@@ -47,7 +53,7 @@ function processReply(session) {
  */
 function sendServiceRequest(selectedText) {
 	var serializer = new JsonSerializer();
-	var session = new Session(localStorage["semantria_key"], localStorage["semantria_secret"], serializer, 'Chrome Extension', true);
+	var session = new Session(credentials.key, credentials.secret, serializer, 'Chrome Extension', true);
 	var docs = [];
 
 	var doc = {"id": 1, "text" : selectedText};

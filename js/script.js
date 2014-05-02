@@ -14,6 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *   along with Semantria Chrome Extension.  If not, see <http://www.gnu.org/licenses/>.
  **/
+
+var credentials = {};
 var selectedText = "";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -42,7 +44,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
  * @param tab Tab.
  */
 function optionItemOnClick(info, tab) {
-    if (localStorage["semantria_key"] == null || localStorage["semantria_secret"] == null || localStorage["semantria_key"] == "" || localStorage["semantria_secret"] == "") {
+    if (credentials.key == null || credentials.secret == null || credentials.key == "" || credentials.secret == "") {
         alert("You must provide your Semantria Key and Secret. Click OK to be redirected to the Options Page.");
         chrome.tabs.create({url: "options.html"});
     } else if (info.selectionText == null || info.selectionText == "") {
@@ -68,7 +70,7 @@ function optionItemOnClick(info, tab) {
  */
 function install_notice() {
     if (localStorage.getItem('install_time')) {
-        if (localStorage["semantria_key"] == null || localStorage["semantria_secret"] == null || localStorage["semantria_key"] == "" || localStorage["semantria_secret"] == "") {
+        if (credentials.key == null || credentials.secret == null || credentials.key == "" || credentials.secret == "") {
             alert("You must provide your Semantria Key and Secret. Click OK to be redirected to the Options Page.");
             chrome.tabs.create({url: "options.html"});
         }
@@ -80,7 +82,12 @@ function install_notice() {
     }
 }
 
-install_notice();
+chrome.storage.sync.get("credentials", function (value) {
+    credentials = value.credentials;
+    install_notice();
+});
+
+
 
 // Adding a Context Menu Option.
 chrome.contextMenus.create({"title": "Sentiment Analysis by Semantria", "contexts": ["selection"], "onclick": optionItemOnClick});

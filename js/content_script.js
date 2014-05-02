@@ -42,8 +42,6 @@ var Twitter = function () {
     var TWITTER_TWEET_TEXT_CLASS = "tweet-text";
     var serializer = new JsonSerializer();
     var session = null;
-    var onFinishedListener = function () {
-    };
 
     /**
      * Given a number representing a sentiment score, returns a color representing this sentiment.
@@ -93,9 +91,9 @@ var Twitter = function () {
                 var total_entities = data["entities"] != null ? data["entities"].length : 0;
                 var total_themes = data["themes"] != null ? data["themes"].length : 0;
                 var img = "<img style='vertical-align:middle' src='" + chrome.extension.getURL("img/logo-16.png") + "'/>";
-                var sentimentText = "sentiment: <span style='color: " + getSentimentColor(data["sentiment_polarity"]) + "'>" + data["sentiment_polarity"] + " (" + data["sentiment_score"] + ")</span>";
-                var entities = " - entities: <span style='color: #419641'>" + total_entities + "</span>";
-                var themes = " - themes: <span style='color: #419641'>" + total_themes + "</span>";
+                var sentimentText = "<span style='font-weight:bold; color: " + getSentimentColor(data["sentiment_polarity"]) + "'>" + data["sentiment_polarity"] + " (" + (Math.round(data["sentiment_score"] * 100) / 100) + ")</span>";
+                var entities = "   entities: <span style='color: #419641'>" + total_entities + "</span>";
+                var themes = "   themes: <span style='color: #419641'>" + total_themes + "</span>";
                 var viewResults = " - <a id='a" + tweetId + "' href='javascript:'>view results</a>";
 
                 $(tweet).after("<div style='padding-top: 0.5em'>" + img + " <span class='with-icn retweet js-tooltip'>" + sentimentText + entities + themes + viewResults + "</span></div>");
@@ -106,18 +104,15 @@ var Twitter = function () {
                 });
             }
         }
-
-        onFinishedListener();
+        $("#semantria-warning").remove();
     }
-
-    this.setOnFinishedListener = function (on) {
-        onFinishedListener = on;
-    };
 
     /**
      * Start finding all tweets and processing them.
      */
     this.start = function () {
+        $('body').append(html_loading);
+
         if (session == null) {
             session = new Session(credentials.key, credentials.secret, serializer, 'Chrome Extension', true);
         }
@@ -138,29 +133,36 @@ var Twitter = function () {
         }
 
         if (docs.length > 0) {
-            session.queueBatchOfDocuments(docs);
             setTimeout(function () {
-                process(session, tweets.length);
+                session.queueBatchOfDocuments(docs);
+                setTimeout(function () {
+                    process(session, tweets.length);
+                }, 2000);
             }, 2000);
         } else {
-            onFinishedListener();
+            $("#semantria-warning").remove();
+            alert("All displayed tweets are already analyzed!");
         }
     };
 
 };
+
+var html_loading = "";
+$.get(chrome.extension.getURL('/twitter-loading.html'), function (data) {
+    html_loading = data;
+});
 
 var twitter = new Twitter();
 
 // Global action button image.
 var img = "<img style='vertical-align:middle' src='" + chrome.extension.getURL("img/logo-23.png") + "'/>";
 
-// Adding a global action. When the clicked, it runs the semantria analysis.
+// Adding a global action. When clicked, it runs the semantria analysis.
 $("#global-actions").append('<li id="semantria-global-action" class="profile"> ' +
-    '<a class="js-nav" href="javascript:;" data-component-term="profile_nav"  title="Semantria"> <span class="Icon  Icon--large">' + img + '</span> ' +
+    '<a  href="javascript:;" data-component-term="profile_nav"  title="Semantria"> <span class="Icon  Icon--large">' + img + '</span> ' +
     '<span class="text">Semantria</span> </a> </li>');
 
 $(document.getElementById("semantria-global-action")).on("click", function () {
-    options.twitter_analysis_confirm=true;
     if (options.twitter_analysis_confirm) {
         $.get(chrome.extension.getURL('/twitter-modal-confirm.html'), function (data) {
             $('body').append(data);
@@ -171,9 +173,11 @@ $(document.getElementById("semantria-global-action")).on("click", function () {
                 options.twitter_analysis_confirm = !$('#semantria-dontask').prop('checked');
                 chrome.storage.sync.set({"options": options});
                 $("#semantria-warning").remove();
-                //twitter.start();
+                twitter.start();
             });
         });
+    } else {
+        twitter.start();
     }
 
 });
