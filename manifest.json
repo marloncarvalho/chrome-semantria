@@ -1,7 +1,7 @@
 {
-    "description": "Semantria - Google Chrome Extension",
+    "description": "Sentiment Analysis",
     "manifest_version": 2,
-    "name": "Sentiment Analysis",
+    "name": "Semantria Sentiment Analysis",
     "web_accessible_resources": ["img/logo-16.png", "img/logo-23.png", "twitter-modal-confirm.html", "twitter-loading.html", "js/jquery-2.0.3.min.map"],
     "content_scripts": [
         {
@@ -27,5 +27,5 @@
         "64": "img/logo-64.png",
         "128": "img/logo-128.png"
     },
-    "version": "0.0.2"
+    "version": "0.0.3"
 }
