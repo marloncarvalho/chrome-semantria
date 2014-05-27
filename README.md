@@ -3,7 +3,7 @@ Semantria Chrome Extension
 
 What is Semantria? 
 -----------------
-Semantria is a Sentiment Analysis tool available at http://www.semantria.com/. Haven't you ever heard about Sentiment Analysis? Tools like Semantria can analysis a piece of text and infer the general sentiment of this text. For example, it can infer if the author, at the time of writing, was happy, neutral or anger. Nonetheless, Semantria is able to do more than only infering the sentiment: it's a complete Natural Language Processing tool.
+Semantria is a Sentiment Analysis tool available at http://www.semantria.com/. Haven't you ever heard about Sentiment Analysis? Tools like Semantria can analyze a piece of text and infer the general sentiment around it. For example, it can infer if the author, at the time of writing, was happy, neutral or anger. Nonetheless, Semantria is able to do more than only infering the sentiment: it's a complete Natural Language Processing tool.
 
 But for further explanations... Google it. :)
 
@@ -19,7 +19,7 @@ Requirements
 
 Usage
 ------
-First off, clone this repository. At Google Chrome, go to the Extensions Page, click "Load unpacked extension..." and point to the folder where you've just cloned this repository. You'll be asked to provide your Key and Secret. Access any web page, select any text and "right click" it. You'll probably see a "Sentiment Analysis by Semantria" option!
+First off, clone this repository. On Google Chrome, go to the Extensions Page, click "Load unpacked extension..." and point to the folder where you've just cloned this repository. You'll be asked to provide your Key and Secret. Access any web page, select any text and "right click" it. You'll probably see a "Sentiment Analysis by Semantria" option!
 
 Contact
 ---------
