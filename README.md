@@ -1,6 +1,15 @@
 Semantria Chrome Extension
 ==========================
 
+Release Notes
+-----------------
+**Version 0.0.3**
+
+1. Performance improvements
+2. Better options page
+3. Twitter Feature
+4. New icons
+
 What is Semantria? 
 -----------------
 Semantria is a Sentiment Analysis tool available at http://www.semantria.com/. Haven't you ever heard about Sentiment Analysis? Tools like Semantria can analyze a piece of text and infer the general sentiment around it. For example, it can infer if the author, at the time of writing, was happy, neutral or anger. Nonetheless, Semantria is able to do more than only infering the sentiment: it's a complete Natural Language Processing tool.
