@@ -7,7 +7,7 @@ Semantria is a Sentiment Analysis tool available at http://www.semantria.com/. H
 
 But for further explanations... Google it. :)
 
-What this plugin does?
+What it does?
 -----------------
 Once installed, you'll be able to highlight any text on any web page and ask for Semantria to analyse it. It has a Twitter feature too which allow you to analyse tweets.
 
